@@ -18,6 +18,7 @@ class Zsh(AutotoolsPackage):
     version('5.4.2', sha256='957bcdb2c57f64c02f673693ea5a7518ef24b6557aeb3a4ce222cefa6d74acc9')
     version('5.3.1', sha256='3d94a590ff3c562ecf387da78ac356d6bea79b050a9ef81e3ecb9f8ee513040e')
     version('5.1.1', sha256='94ed5b412023761bc8d2f03c173f13d625e06e5d6f0dff2c7a6e140c3fa55087')
+    version('5.7.1', url='http://downloads.sourceforge.net/project/zsh/zsh/5.7.1/zsh-5.7.1.tar.xz', md5='374f9fdd121b5b90e07abfcad7df0627')
 
     # Testing for terminal related things causes failures in e.g. Jenkins.
     # See e.g. https://www.zsh.org/mla/users/2003/msg00845.html,
