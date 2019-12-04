@@ -11,6 +11,7 @@ import subprocess
 import os
 import json
 import re
+import sys
 
 import llnl.util.tty as tty
 
@@ -31,7 +32,8 @@ def module(*args):
     if args[0] in module_change_commands:
         # Do the module manipulation, then output the environment in JSON
         # and read the JSON back in the parent process to update os.environ
-        module_cmd += ' >/dev/null; python -c %s' % py_cmd
+        module_cmd += ' >/dev/null; python --version; {0} -c {1}'.format(
+            sys.executable, py_cmd)
         module_p  = subprocess.Popen(module_cmd,
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.STDOUT,
@@ -44,7 +46,13 @@ def module(*args):
         env = env_output.strip().split('\n')[-1]
 
         # Update os.environ with new dict
-        env_dict = json.loads(env)
+        try:
+            env_dict = json.loads(env)
+        except json.decoder.JSONDecodeError:
+            tty.error("External command `{0}` resulted in output"
+                      " `{1}` which cannot be turned in to valid"
+                      " JSON".format(module_cmd, env_output))
+            raise
         os.environ.clear()
         os.environ.update(env_dict)
     else:
